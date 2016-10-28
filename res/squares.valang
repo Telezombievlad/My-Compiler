@@ -1,0 +1,75 @@
+// It prints numbers and their squares
+
+// CYCLE NEEDED HERE
+
+PUSHR AX
+OUT
+PUSHR AX
+MUL
+OUT
+POP
+
+PUSHR AX
+PUSH 1
+SUM
+POPR AX
+
+//-------------------------------- 0 0
+
+PUSHR AX
+OUT
+PUSHR AX
+MUL
+OUT
+POP
+
+PUSHR AX
+PUSH 1
+SUM
+POPR AX
+
+//-------------------------------- 1 1
+
+PUSHR AX
+OUT
+PUSHR AX
+MUL
+OUT
+POP
+
+PUSHR AX
+PUSH 1
+SUM
+POPR AX
+
+//-------------------------------- 2 4
+
+PUSHR AX
+OUT
+PUSHR AX
+MUL
+OUT
+POP
+
+PUSHR AX
+PUSH 1
+SUM
+POPR AX
+
+//-------------------------------- 3 9
+
+PUSHR AX
+OUT
+PUSHR AX
+MUL
+OUT
+POP
+
+PUSHR AX
+PUSH 1
+SUM
+POPR AX
+
+//-------------------------------- 4 16
+
+END
