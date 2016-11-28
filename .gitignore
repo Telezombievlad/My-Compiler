@@ -44,7 +44,7 @@ Thumbs.db
 *.cmake
 CMakeCache.txt
 CMakeLists.txt
-Makefile.*
+*/Makefile.*
 
 # Unnecessary folders #
 #######################
