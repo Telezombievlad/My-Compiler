@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "std0/Assembler.hpp"
+#include "std1/Assembler.hpp"
 #include "../../additional/exception/MyException.hpp"
 
 // Defines:
@@ -24,13 +25,14 @@ int main(int argc, const char* argv[])
 		}
 
 		if (std::strcmp(argv[2], "--std=0") == 0) AssemblerStd0::assemble(argv[1], argv[3]);
+		if (std::strcmp(argv[2], "--std=1") == 0) AssemblerStd1::assemble(argv[1], argv[3]);
 		else throw Exception("Unknown standard", PROGRAM_POS);
 	}
-	catch (Exception ex)
+	catch (Exception& ex)
 	{
 		std::cout << ex.what() << std::endl;
 	}
-	catch (std::exception ex)
+	catch (std::exception& ex)
 	{
 		std::cout << ex.what() << std::endl;
 	}	

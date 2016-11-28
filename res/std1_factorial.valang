@@ -1,0 +1,47 @@
+// Factorial
+
+FACTORIAL: // Stack: (n)
+
+	// Saving n to register
+	popr ax
+	// Stack: ...
+
+	push 1              // <-- return value if n <= 1 
+	pushr ax
+	push 1
+	jbe factorial_return
+	pop                 // <-- n > 1 so we don't need that 1
+
+	// Pushing to stack, cause registers are reset by the recursion
+	pushr ax
+	// Stack: (n)
+
+	// Calculating (n-1)
+	pushr ax
+	push 1
+	sub
+	// Stack: (n) (n-1)
+
+	// Stack: (n) (n-1)
+	call FACTORIAL 
+	// Stack: (n) (n-1)!
+
+	// Calculating (n-1)!
+	mul
+
+	factorial_return:
+ret // Stack: (n!)
+
+
+// Main
+beg
+	in
+	call FACTORIAL
+	out
+end
+
+
+
+
+
+

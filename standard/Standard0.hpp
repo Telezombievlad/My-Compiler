@@ -34,9 +34,9 @@ namespace MyStd0
 
 	namespace _address
 	{
-		const Adr_t ADRESS_COUNT = 4;
+		const Adr_t ADDRESS_COUNT = 4;
 
-		const char* ADDRESSES[ADRESS_COUNT] =
+		const char* ADDRESSES[ADDRESS_COUNT] =
 		{
 			"AX",
 			"BX",
@@ -44,7 +44,7 @@ namespace MyStd0
 			"DX"
 		};
 
-		const std::array<Val_t, ADRESS_COUNT> DEFAULT_REGISTERS{{0, 0, 0, 0}};
+		const std::array<Val_t, ADDRESS_COUNT> DEFAULT_REGISTERS{{0, 0, 0, 0}};
 
 	} // namespace _address
 
@@ -66,7 +66,7 @@ namespace MyStd0
 		{
 		public:
 			// Variables:
-				std::array<Val_t, _address::ADRESS_COUNT> regs;
+				std::array<Val_t, _address::ADDRESS_COUNT> regs;
 				Stack<Val_t, STACK_SIZE> st; 
 
 			// Ctor:

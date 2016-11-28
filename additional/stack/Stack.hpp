@@ -101,6 +101,27 @@ namespace MyStackStaticArrayRepresentation
 				return stack_[elementCount_ - 1];
 			}
 
+			T& at(size_t index)
+			{
+				try { throwIfNotOk(); }
+				catch (const MyException::Exception& exception)
+				{
+					throw MyException::Exception("Assertion failed", PROGRAM_POS, exception);
+				}
+
+				if (index >= stackSize_)
+				{
+					throw MyException::Exception("Access out of stack", PROGRAM_POS);
+				}
+
+				return stack_[index];
+			}
+
+			size_t filledSize() const
+			{
+				return elementCount_;
+			}
+
 			// Strong ExcG
 			bool empty() const
 			{
@@ -227,7 +248,7 @@ namespace MyStackStaticArrayRepresentation
 			}
 
 			// Strong ExcG
-			T&& pop()
+			T pop()
 			{
 				try { throwIfNotOk(); }
 				catch (const MyException::Exception& exception)
@@ -242,7 +263,7 @@ namespace MyStackStaticArrayRepresentation
 
 				elementCount_--;
 
-				return std::move(stack_[elementCount_]);
+				return stack_[elementCount_];
 			}
 
 		// Debugging:

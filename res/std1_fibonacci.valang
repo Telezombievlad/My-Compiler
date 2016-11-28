@@ -1,0 +1,74 @@
+// Fibonacci numbers
+
+FIBONACCI: // Stack: (n)
+
+	// Saving n to ax
+	popr ax
+
+	// Probable return value:
+	push 1
+
+	// Checking if n <= 1:
+	pushr ax
+	push 1
+	jbe fibonacci_return
+
+	// Deleting probable return value
+	pop 
+
+	// Calculating (n-1):
+	pushr ax
+	push 1
+	sub
+
+	// Calculating (n-2):
+	pushr ax
+	push 2
+	sub
+
+	// Calculating F(n-2):
+	call FIBONACCI
+
+	// Stack: (n-1) (F(n-2))
+	// Swapping em
+
+	popr ax
+	popr bx
+	pushr ax
+	pushr bx
+
+	// Calculating F(n-1):
+	call FIBONACCI
+
+	// Calculating F(n-1)+F(n-2)
+	add
+
+	fibonacci_return:
+ret // Stack: (F(n))
+
+
+// Main:
+beg
+	in
+	popr cx
+
+	push 0
+	popr dx
+
+	cycle_for:
+	//{
+		pushr dx
+		call FIBONACCI
+		out
+	
+		pushr dx
+		push 1
+		add
+		popr dx
+	
+		pushr dx
+		pushr cx
+		jbe cycle_for
+	//}
+
+end

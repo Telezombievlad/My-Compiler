@@ -61,7 +61,7 @@ namespace AssemblerStd0
 		{
 			using namespace MyStd0::_address;
 
-			for (MyStd0::Adr_t addrI = 0; addrI < MyStd0::_address::ADRESS_COUNT; ++addrI)
+			for (MyStd0::Adr_t addrI = 0; addrI < MyStd0::_address::ADDRESS_COUNT; ++addrI)
 			{
 				if (std::strcmp(word.word, ADDRESSES[addrI]) == 0) 
 				{

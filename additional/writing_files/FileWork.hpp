@@ -28,7 +28,7 @@ namespace FileWork
 
 	// Constants:
 
-	const size_t MAX_WORD_SIZE = 10;
+	const size_t MAX_WORD_SIZE = 30;
 	const size_t CHUNK_SIZE = 1024;
 
 	// Single word:
@@ -42,6 +42,17 @@ namespace FileWork
 				size_t col;
 				char word[MAX_WORD_SIZE + 1]; // Must have \0
 
+			// Ctor:
+
+				explicit Word(const char* newWord) :
+					file (""),
+					line (0),
+					col  (0),
+					word ()
+				{
+					std::strcpy(word, newWord);
+				}
+
 			// Operator!=:
 				bool operator!=(Word that) const
 				{
@@ -54,7 +65,7 @@ namespace FileWork
 				}
 		};
 
-		Word NULL_WORD{"", 0, 0, "\0\0\0\0\0\0"};
+		Word NULL_WORD{Word("")};
 
 	// Reading from file:
 	// (Text file)
@@ -68,7 +79,7 @@ namespace FileWork
 				~ReadTextFile();
 
 			// Functions:
-				Word&& getWord();
+				Word getWord();
 
 		private:
 			// Variables:
@@ -107,18 +118,13 @@ namespace FileWork
 			}
 
 		// Other func:
-			Word&& ReadTextFile::getWord()
+			Word ReadTextFile::getWord()
 			{	
 				Word toReturn{NULL_WORD};
 
 				bool inWord = false;
 				for (size_t wordIndex = 0; wordIndex < MAX_WORD_SIZE; ++index_, ++col_)
 				{
-					if (index_ > size_)
-					{
-						throw Exception("index_ > size_", PROGRAM_POS);
-					}
-
 					if (index_ == size_)
 					{
 						std::memset(buf_, 0, sizeof(buf_));
@@ -135,6 +141,7 @@ namespace FileWork
 
 					if (buf_[index_] == '\n')
 					{
+						++index_;
 						++line_;
 						col_ = 0;
 						if (inWord) break;
@@ -160,7 +167,7 @@ namespace FileWork
 					}
 				}
 
-				return std::move(toReturn);
+				return toReturn;
 			}
 
 	// Reading from file:
@@ -176,6 +183,8 @@ namespace FileWork
 
 			// Functions:
 				std::vector<unsigned char> getBytes(size_t count);
+
+				bool finished() const;
 
 		private:
 			// Variables:
@@ -216,11 +225,6 @@ namespace FileWork
 
 				for (size_t bytesRead = 0; ; ++index_, ++bytesRead)
 				{
-					if (index_ > size_)
-					{
-						throw Exception("index_ > size_", PROGRAM_POS);
-					}
-
 					if (index_ == size_)
 					{
 						std::memset(buf_, 0, sizeof(buf_));
@@ -231,9 +235,9 @@ namespace FileWork
 
 						if (size_ == 0) // File finished
 						{
-							if (bytesRead != count)
+							if (bytesRead < count)
 							{
-								throw Exception("Unable to read the needed amount of bytes", filename_, "", 0);
+								throw Exception("Unable to read enough bytes from file", filename_, "", 0);
 							}
 
 							break;
@@ -248,6 +252,13 @@ namespace FileWork
 				return toReturn;
 			}
 
+			bool ReadBinaryFile::finished() const
+			{
+				if (size_ == 0) return true;
+
+				return false;
+			}
+
 	// Writing to file:
 	// (Text file)
 
@@ -260,10 +271,12 @@ namespace FileWork
 				~WriteTextFile();
 
 			// Other func:
-				void writeWord(Word&& toWrite);
+				void writeWord(      Word&& toWrite);
+				void writeWord(const Word&  toWrite);
 
 		private:
 			// Variables:
+				const char* filename_;
 				std::FILE* file_;
 				char buf_[CHUNK_SIZE];
 				size_t size_;
@@ -271,6 +284,7 @@ namespace FileWork
 
 		// Ctor && dtor:
 			WriteTextFile::WriteTextFile(const char* filename) :
+				filename_ (filename),
 				file_ (std::fopen(filename, "w")),
 				buf_  (),
 				size_ (0)
@@ -293,13 +307,13 @@ namespace FileWork
 		// Other func:
 			void WriteTextFile::writeWord(Word&& toWrite)
 			{
-				for (size_t wordIndex = 0; wordIndex < MAX_WORD_SIZE; ++wordIndex, ++size_)
+				for 
+				(
+					size_t wordIndex = 0; 
+					 wordIndex < MAX_WORD_SIZE && toWrite.word[wordIndex] != '\0'; 
+					 ++wordIndex, ++size_
+				)
 				{
-					if (size_ > CHUNK_SIZE)
-					{
-						throw Exception("size_ > CHUNK_SIZE", PROGRAM_POS);
-					}
-
 					if (size_ == CHUNK_SIZE)
 					{
 						size_t written = std::fwrite(buf_, sizeof(*buf_), sizeof(buf_), file_);
@@ -310,7 +324,34 @@ namespace FileWork
 
 						if (written != CHUNK_SIZE)
 						{
-							throw Exception("Unable to write to file", PROGRAM_POS);
+							throw Exception("Unable to write to file", filename_, "", 0);
+						}
+					}
+
+					buf_[size_] = toWrite.word[wordIndex];
+				}
+			}
+
+			void WriteTextFile::writeWord(const Word& toWrite)
+			{
+				for 
+				(
+					size_t wordIndex = 0; 
+					 wordIndex < MAX_WORD_SIZE && toWrite.word[wordIndex] != '\0'; 
+					 ++wordIndex, ++size_
+				)
+				{
+					if (size_ == CHUNK_SIZE)
+					{
+						size_t written = std::fwrite(buf_, sizeof(*buf_), sizeof(buf_), file_);
+
+						std::memset(buf_, 0, sizeof(buf_));
+
+						size_ = 0;
+
+						if (written != CHUNK_SIZE)
+						{
+							throw Exception("Unable to write to file", filename_, "", 0);
 						}
 					}
 
@@ -334,6 +375,7 @@ namespace FileWork
 
 		private:
 			// Variables:
+				const char* filename_;
 				std::FILE* file_;
 				unsigned char buf_[CHUNK_SIZE];
 				size_t size_;
@@ -341,6 +383,7 @@ namespace FileWork
 
 		// Ctor && dtor:
 			WriteBinaryFile::WriteBinaryFile(const char* filename) :
+				filename_ (filename),
 				file_ (std::fopen(filename, "wb")),
 				buf_  (),
 				size_ (0)
@@ -365,11 +408,6 @@ namespace FileWork
 			{
 				for (size_t vectIndex = 0; vectIndex < toWrite.size(); ++vectIndex, ++size_)
 				{
-					if (size_ > CHUNK_SIZE)
-					{
-						throw Exception("size_ > CHUNK_SIZE", PROGRAM_POS);
-					}
-
 					if (size_ == CHUNK_SIZE)
 					{
 						size_t written = std::fwrite(buf_, sizeof(*buf_), sizeof(buf_), file_);
@@ -380,7 +418,7 @@ namespace FileWork
 
 						if (written != CHUNK_SIZE)
 						{
-							throw Exception("Unable to write to file", PROGRAM_POS);
+							throw Exception("Unable to write to file", filename_, "", 0);
 						}
 					}
 
