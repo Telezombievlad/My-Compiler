@@ -1,1 +1,0 @@
-clang++   -std=c++14 -Werror -Wall -Wno-padded -Wno-switch-enum -Wgnu-array-member-paren-init -O0 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -Wl,-headerpad_max_install_names  CMakeFiles/my_assembler.dir/src/assemble.cpp.o  -o bin/my_assembler  

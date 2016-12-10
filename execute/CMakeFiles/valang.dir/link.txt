@@ -1,1 +1,0 @@
-clang++   -std=c++14 -Werror -Wall -Wno-padded -O0 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -Wl,-headerpad_max_install_names  CMakeFiles/valang.dir/src/valang.cpp.o  -o bin/valang  

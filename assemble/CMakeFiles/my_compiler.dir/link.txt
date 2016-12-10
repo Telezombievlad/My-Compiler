@@ -1,1 +1,0 @@
-clang++   -std=c++14 -Werror -Wall -Wno-padded -Wno-switch-enum -Ofast   CMakeFiles/my_compiler.dir/assemble.cpp.obj CMakeFiles/my_compiler.dir/CMakeFiles/3.5.2/CompilerIdCXX/CMakeCXXCompilerId.cpp.obj  -o bin/my_compiler.exe  
