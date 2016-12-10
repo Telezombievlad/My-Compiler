@@ -13,7 +13,7 @@
 
 // Defines:
 
-#define FILENAME "std0/Disaßssembler.hpp"
+#define FILENAME "std0/Disassembler.hpp"
 #define PROGRAM_POS FILENAME, __FUNCTION__, __LINE__
 
 // Code:
